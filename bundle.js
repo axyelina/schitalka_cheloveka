@@ -1,6 +1,6 @@
 window.onload = (function () {
     const document = window.document;
-    // constIABLES
+    // константы
     const calc = document.querySelector(".calculator");
     const calcDisplay = calc.querySelector("#display");
     const calcKeys = calc.querySelectorAll(".calculator__key");
@@ -8,11 +8,10 @@ window.onload = (function () {
     const calcButtonsOperators = calc.querySelectorAll(".calculator__operator");
     const calcClear = calc.querySelectorAll(".calculator__clear");
     const calcEqual = calc.querySelector(".calculator__key--equal");
-    const calcPower = calc.querySelectorAll(".calculator__power");
-    const calcSpace = calc.querySelectorAll(".calculator__backspace");
+    const calcSpace = calc.querySelector(".calculator__backspace");
     const displayManager = new DisplayManager(calcDisplay);
 
-    // INIT CALC KEYS
+    //инициализация кнопок
     calcKeys.forEach(function (currentNode) {
         const currentText = currentNode.getAttribute("value");
         currentNode.textContent = currentText;
@@ -42,19 +41,13 @@ window.onload = (function () {
         calcDisplay.value = calculate(calcDisplay.value);
     });
 
-    //Починить
-    // POWER BUTTON
-    calcPower.on("click", function () {
-        calcDisplay.val(Math.pow(calcDisplay.val(), 3));
-    });
-
     // BACKSPACE BUTTON
-    calcSpace.on("click", function () { // https://www.w3schools.com/jsref/jsref_substring.asp
-        calcDisplay.val(calcDisplay.val().substring(0, calcDisplay.val().length - 1));
+    calcSpace.addEventListener("click", function () {
+        calcDisplay.value = calcDisplay.value.substring(0,calcDisplay.value.length - 1);
     });
 });
 
-maxPriority = 2;
+maxPriority = 3;
 
 calculate = (input) => {
     const parser = new Parser();
@@ -89,16 +82,13 @@ class DisplayManager {
             this.display.value = this.display.value + operand;
     }
     addOperator(operator) {
-        if (OperationRegistry.some(x => x.name === operator)) {
-            if (OperationRegistry.some(x => x.name === this.display.value[this.display.value.length - 1])) {
-                const withoutLast = this.display.value.substring(0, this.display.value.length - 1);
-                this.display.value = withoutLast + operator;
-            } else {
-                this.display.value = this.display.value + " " + operator;
+        //убран код заменяющий первый символ
+        if (this.display.value === "")
+            this.display.value != OperationRegistry.find(x => x.name === "-");
+        else 
+            this.display.value = this.display.value + " " + operator;
             }
-        }
-    }
-}
+        }   
 
 class BinaryExpressionTreeBuilder {
     build = (operatorsAndOperands) => {
@@ -206,7 +196,12 @@ OperationRegistry = [
     },
     {
         execute: (left, right) => left / right,
-        priority: 1,
+        priority: 2,
         name: "/"
+    },
+    {
+        execute: (left, right) => left ** right,
+        priority: 3,
+        name: "^"
     }
 ]
