@@ -16,10 +16,10 @@ body {
 .calculator {
     width: 250px;
     height: 350px;
-    border: 2px solid black;
+    border: 2px solid rgb(17, 17, 17);
     margin: 100px auto 0;
     text-align: center;
-    background-color: yellowgreen;
+    background-color: rgb(255, 174, 205);
     box-shadow: 0 0 30px grey;
     border-radius: 4px;
 }
@@ -60,7 +60,7 @@ body {
 }
 
 .calculator__key:hover {
-    background-color: yellow;
+    background-color: rgb(149, 234, 255);
     font-weight: 700;
 }
 
